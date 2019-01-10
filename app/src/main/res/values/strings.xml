@@ -8,6 +8,12 @@
     <string name="rechercher">Rechercher</string>
     <string name="title_activity_settings">Paramètres</string>
 
+    <string name="titre">Catch Point</string>
+    <string name="champLogin">Insérez votre login</string>
+    <string name="champMDP">Insérez votre mot de passe</string>
+    <string name="buttonInscription">S\'inscrire</string>
+    <string name="buttonConnexion">Se connecter</string>
+
     <!-- Strings related to Settings -->
 
     <string name="pref_header_help">Aides</string>

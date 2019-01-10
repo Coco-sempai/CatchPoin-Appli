@@ -23,4 +23,9 @@ public class SettingsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
     }
+
+    public void disconnect(View view){
+        Intent intent = new Intent(this, LogActivity.class);
+        startActivity(intent);
+    }
 }

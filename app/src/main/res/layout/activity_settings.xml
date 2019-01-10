@@ -55,7 +55,8 @@
             android:layout_column="1"
             android:textSize="24sp"
             android:text="@string/pref_header_log_out"
-            android:padding="10dip" />
+            android:padding="10dip"
+            android:onClick="disconnect"/>
         </TableRow>
     </TableLayout>
 
