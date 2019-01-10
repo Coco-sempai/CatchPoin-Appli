@@ -56,7 +56,7 @@
             android:textSize="24sp"
             android:text="@string/pref_header_log_out"
             android:padding="10dip" />
-    </TableRow>
+        </TableRow>
     </TableLayout>
 
 </android.support.constraint.ConstraintLayout>
