@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_filtre"
+        android:icon="@drawable/ic_menu_filtre"
+        android:title="@string/filtres"/>
+
+    <item
+        android:id="@+id/menu_parcours"
+        android:icon="@drawable/ic_menu_parcours"
+        android:title="@string/parcours"/>
+
+    <item
+        android:id="@+id/menu_profil"
+        android:icon="@drawable/ic_menu_profil"
+        android:title="@string/profil"/>
+
+    <item
+        android:id="@+id/menu_recherche"
+        android:icon="@drawable/ic_menu_search"
+        android:title="@string/rechercher"/>
+
+</menu>

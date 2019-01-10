@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">CatchPoint</string>
     <string name="title_activity_maps">Map</string>
+    <string name="catchpoint">CatchPoint</string>
+    <string name="filtres">Filtres</string>
+    <string name="parcours">Mes parcours</string>
+    <string name="profil">Profil</string>
+    <string name="rechercher">Rechercher</string>
 </resources>
