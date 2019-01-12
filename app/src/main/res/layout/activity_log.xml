@@ -72,7 +72,7 @@
         app:layout_constraintTop_toBottomOf="@+id/motDePasse"
         app:layout_constraintHorizontal_bias="0.12"
         android:layout_marginTop="50dp"
-        android:theme="@style/buttonTheme"/>
+        android:theme="@drawable/main_header_selector"/>
 
     <Button
         android:layout_width="140dp"
