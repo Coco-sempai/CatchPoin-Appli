@@ -39,19 +39,19 @@ public class LogActivity extends AppCompatActivity {
 
                 String admin = "root";
 
-                if((login.getText().toString().trim().equals("")== false) && (login.getText().toString().equals(admin))){
+                if((!login.getText().toString().trim().equals("")) && (login.getText().toString().equals(admin))){
                     str_login = login.getText().toString().trim();
                 }else {
                     info_valable = false;
                 }
 
-                if(mdp.getText().toString().trim().equals("")== false){
+                if(!mdp.getText().toString().trim().equals("")){
                     str_mdp = mdp.getText().toString().trim();
                 }else {
                     info_valable = false;
                 }
 
-                if(info_valable == false){
+                if(!info_valable){
                     Toast.makeText(getApplicationContext(), "il manque des infos ou le login n'existe pas !", Toast.LENGTH_SHORT).show();
                 } else {
                     Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
