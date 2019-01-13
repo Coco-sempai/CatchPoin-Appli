@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ProfilActivity"
+    android:background="#D6FDC7">
+
+    <include
+        layout="@layout/top_bar_profil"
+        android:id="@+id/top_bar_profil"/>
+
+
+
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:stretchColumns="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top_bar_profil"
+        >
+
+
+        <ImageView
+            android:id="@+id/imageProfil"
+            android:layout_width="150dp"
+            android:layout_height="120dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/chewbacca_portrait" />
+
+        <TableRow
+            android:background="@color/White">
+
+            <TextView
+                android:layout_column="1"
+                android:padding="10dip"
+                android:text="@string/name_profil_bar"
+                android:textSize="24sp"
+                android:textColor="#353535"/>
+
+            <TextView
+                android:layout_column="1"
+                android:padding="10dip"
+                android:text="Henry"
+                android:textSize="20sp"
+                android:textAlignment="textEnd"/>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/pititefleche"
+                android:tint="@color/colorIcon"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="25dp"
+                />
+
+        </TableRow>
+
+        <View
+            android:layout_height="2dip"
+            android:background="#D8D8D8" />
+
+        <TableRow
+            android:background="@color/White">
+
+            <TextView
+                android:layout_column="1"
+                android:padding="10dip"
+                android:text="@string/prenom_profil_bar"
+                android:textSize="24sp"
+                android:textColor="#353535"/>
+
+            <TextView
+                android:layout_column="1"
+                android:padding="10dip"
+                android:text="Antoine"
+                android:textSize="20sp"
+                android:textAlignment="textEnd"/>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/pititefleche"
+                android:tint="@color/colorIcon"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="18dp"
+                android:contentDescription="petiteFleche" />
+        </TableRow>
+
+        <View
+            android:layout_height="2dip"
+            android:background="#D8D8D8" />
+
+        <TableRow
+            android:background="@color/White">
+
+            <TextView
+                android:layout_column="1"
+                android:padding="10dip"
+                android:text="@string/pseudo_profil_bar"
+                android:textSize="24sp"
+                android:textColor="#353535"/>
+
+            <TextView
+                android:layout_column="1"
+                android:padding="10dip"
+                android:text="Antoine90"
+                android:textSize="20sp"
+                android:textAlignment="textEnd"/>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/pititefleche"
+                android:tint="@color/colorIcon"
+                android:layout_marginTop="18dp"
+                android:layout_marginRight="18dp"
+                />
+        </TableRow>
+
+        <View
+            android:layout_height="2dip"
+            android:layout_marginEnd="5dp"
+            android:background="#D8D8D8" />
+
+        <TableRow
+            android:background="@color/White">
+
+            <TextView
+                android:layout_column="1"
+                android:padding="10dip"
+                android:text="@string/email_profil_bar"
+                android:textSize="24sp"
+                android:textColor="#353535"/>
+
+            <TextView
+                android:layout_column="1"
+                android:padding="10dip"
+                android:text="Antoine@laposte.fr"
+                android:textSize="20sp"
+                android:textAlignment="textEnd"/>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/pititefleche"
+                android:tint="@color/colorIcon"
+                android:layout_marginTop="18dp"
+                android:layout_marginRight="18dp"
+                />
+        </TableRow>
+
+        <View
+            android:layout_height="2dip"
+            android:layout_marginEnd="5dp"
+            android:background="#D8D8D8" />
+
+        <TableRow
+            android:background="@color/White">
+
+            <TextView
+                android:layout_column="1"
+                android:padding="10dip"
+                android:text="@string/mdp_profil_bar"
+                android:textSize="24sp"
+                android:textColor="#353535"
+                />
+
+            <TextView
+                android:layout_column="1"
+                android:padding="10dip"
+                android:text="******"
+                android:textSize="24sp"
+                android:textAlignment="textEnd"/>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/pititefleche"
+                android:tint="@color/colorIcon"
+                android:layout_marginTop="18dp"
+                android:layout_marginRight="18dp"
+                />
+        </TableRow>
+    </TableLayout>
+</android.support.constraint.ConstraintLayout>

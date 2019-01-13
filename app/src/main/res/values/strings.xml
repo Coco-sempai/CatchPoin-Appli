@@ -20,4 +20,15 @@
     <string name="pref_header_about">A propos</string>
     <string name="pref_header_log_out">Se déconnecter</string>
     <string name="title_top_bar">Paramètres</string>
+    <string name="title_top_bar_profil">Profil</string>
+    <string name="nom">Nom</string>
+    <string name="item_default_name">Antoine</string>
+
+
+    <string name="name_profil_bar">Nom</string>
+    <string name="prenom_profil_bar">Prénom</string>
+    <string name="pseudo_profil_bar">Pseudo</string>
+    <string name="email_profil_bar">E-mail</string>
+    <string name="mdp_profil_bar">Mot de passe</string>
+
 </resources>

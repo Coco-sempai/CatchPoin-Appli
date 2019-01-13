@@ -24,7 +24,8 @@
             android:layout_column="1"
             android:text="@string/profil"
             android:textSize="24sp"
-            android:padding="10dip" />
+            android:padding="10dip"
+            android:onClick="showProfil"/>
     </TableRow>
         <View
             android:layout_height="1dip"
