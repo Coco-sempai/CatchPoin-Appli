@@ -60,6 +60,11 @@ public class LogActivity extends AppCompatActivity {
                     finish();
                     startActivity(intent);
                 }
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                intent.putExtra("login", str_login);
+                intent.putExtra("motDePasse", str_mdp);
+                finish();
+                startActivity(intent);
 
             }
         });

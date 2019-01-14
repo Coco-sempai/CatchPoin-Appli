@@ -28,9 +28,4 @@ public class SettingsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LogActivity.class);
         startActivity(intent);
     }
-
-    public void showProfil(View view){
-        Intent intent = new Intent(this, ProfilActivity.class);
-        startActivity(intent);
-    }
 }

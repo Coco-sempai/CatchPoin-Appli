@@ -50,7 +50,8 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
                     Log.v("itemSelected", "Mes parcours");
                     return true;
                 case R.id.menu_profil:
-                    Log.v("itemSelected", "Profil");
+                    Intent intent = new Intent(getBaseContext(), ProfilActivity.class);
+                    startActivity(intent);
                     return true;
                 case R.id.menu_recherche:
                     Log.v("itemSelected", "Recherche");
@@ -189,4 +190,5 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
+
 }

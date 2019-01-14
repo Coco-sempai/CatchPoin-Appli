@@ -11,8 +11,6 @@
         layout="@layout/top_bar_profil"
         android:id="@+id/top_bar_profil"/>
 
-
-
     <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
