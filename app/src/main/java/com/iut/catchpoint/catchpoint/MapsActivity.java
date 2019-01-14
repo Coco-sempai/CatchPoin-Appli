@@ -20,6 +20,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.common.logging.Logger;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,40 +29,21 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
+import com.iut.catchpoint.catchpoint.models.Point;
 
 
 public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener,
         OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, LocationListener {
 
+    public final String URL_PARCOURS = "http://localhost:8000/api/parcours";
+    public final String URL_DEPART = "http://localhost:8000/api/parcours/depart";
+
     private GoogleMap mMap;
     private FrameLayout coordinatorLayout;
     private ImageView settings__view;
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.menu_filtre:
-                    Log.v("itemSelected", "Filtres");
-                    return true;
-                case R.id.menu_parcours:
-                    Log.v("itemSelected", "Mes parcours");
-                    return true;
-                case R.id.menu_profil:
-                    Intent intent = new Intent(getBaseContext(), ProfilActivity.class);
-                    startActivity(intent);
-                    return true;
-                case R.id.menu_recherche:
-                    Log.v("itemSelected", "Recherche");
-                    return true;
-            }
-            return false;
-        }
-
-    };
+    private Point[] pointDepart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +57,31 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         settings__view = findViewById(R.id.settings);
+
+
+        StringRequest request=new StringRequest(com.android.volley.Request.Method.GET,
+                URL_DEPART, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                pointDepart=new Gson().fromJson(response,Point[].class);
+                //TODO Chargement de tout les parcours en même temps ou juste quand on clic sur un point ?
+
+                //Log.d("pointDepart",pointDepart[0].getDescriptionPoint());
+                Location pointLocation;
+                for(Point point:pointDepart) {
+                    pointLocation = new Location("test");
+                    pointLocation.setLatitude(pointDepart[0].getLatitude());
+                    pointLocation.setLongitude((pointDepart[0].getLongitude()));
+                    drawMarker(pointLocation);
+                }
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("VolleyError", String.valueOf(error));
+            }
+        });
+        ConnectionManager.getInstance(this).add(request);
     }
 
 
@@ -157,12 +165,12 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
 
     private void drawMarker(Location location) {
         if (mMap != null) {
-            mMap.clear();
+            //mMap.clear();
             LatLng gps = new LatLng(location.getLatitude(), location.getLongitude());
             mMap.addMarker(new MarkerOptions()
                     .position(gps)
-                    .title("Current Position"));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(gps, 12));
+                    .title(location.getProvider()));
+            //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(gps, 12));
         }
     }
 
@@ -191,4 +199,26 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
         startActivity(intent);
     }
 
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.menu_filtre:
+                    Log.v("itemSelected", "Filtres");
+                    return true;
+                case R.id.menu_parcours:
+                    Log.v("itemSelected", "Mes parcours");
+                    return true;
+                case R.id.menu_profil:
+                    Intent intent = new Intent(getBaseContext(), ProfilActivity.class);
+                    startActivity(intent);
+                    return true;
+                case R.id.menu_recherche:
+                    Log.v("itemSelected", "Recherche");
+                    return true;
+            }
+            return false;
+        }
+    };
 }
