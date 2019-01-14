@@ -1,0 +1,33 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="60dp"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:background="@drawable/main_header_selector">
+
+<ImageView
+    android:id="@+id/arrow_back"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
+    android:src="@drawable/ic_back"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    android:layout_marginStart="15dp"
+    android:tint="@color/colorIcon"
+    android:onClick="goBack"/>
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/title_top_bar_mesparcours"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    android:fontFamily="@font/trebuc"
+    android:textSize="28sp"
+    />
+
+
+</android.support.constraint.ConstraintLayout>

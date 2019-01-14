@@ -45,7 +45,10 @@
         <activity
             android:name=".SettingsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ProfilActivity"
+        <activity
+            android:name=".ProfilActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".MesParcoursActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 

@@ -1,18 +1,16 @@
 package com.iut.catchpoint.catchpoint;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,8 +20,6 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.android.gms.common.logging.Logger;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -208,11 +204,12 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
                     Log.v("itemSelected", "Filtres");
                     return true;
                 case R.id.menu_parcours:
-                    Log.v("itemSelected", "Mes parcours");
+                    Intent intentParcours = new Intent(getBaseContext(), MesParcoursActivity.class);
+                    startActivity(intentParcours);
                     return true;
                 case R.id.menu_profil:
-                    Intent intent = new Intent(getBaseContext(), ProfilActivity.class);
-                    startActivity(intent);
+                    Intent intentProfil = new Intent(getBaseContext(), ProfilActivity.class);
+                    startActivity(intentProfil);
                     return true;
                 case R.id.menu_recherche:
                     Log.v("itemSelected", "Recherche");
