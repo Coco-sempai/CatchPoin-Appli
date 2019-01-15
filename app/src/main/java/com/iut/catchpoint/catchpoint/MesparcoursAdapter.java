@@ -12,7 +12,7 @@ import com.iut.catchpoint.catchpoint.models.Parcours;
 import java.util.List;
 
 public class MesparcoursAdapter extends RecyclerView.Adapter<MesparcoursAdapter.MyViewHolder> {
-    private List<Parcours> mesParcoursList;
+    private Parcours[] tabParcours;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
@@ -23,8 +23,8 @@ public class MesparcoursAdapter extends RecyclerView.Adapter<MesparcoursAdapter.
         }
     }
 
-    public MesparcoursAdapter(List<Parcours> mesParcoursList) {
-        this.mesParcoursList = mesParcoursList;
+    public MesparcoursAdapter(Parcours[] mesParcoursList) {
+        this.tabParcours = mesParcoursList;
     }
 
     @NonNull
@@ -36,12 +36,12 @@ public class MesparcoursAdapter extends RecyclerView.Adapter<MesparcoursAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Parcours parc = mesParcoursList.get(position);
+        Parcours parc = tabParcours[position];
         holder.name.setText(parc.getNom_parcours());
     }
 
     @Override
     public int getItemCount() {
-        return mesParcoursList.size();
+        return tabParcours.length;
     }
 }

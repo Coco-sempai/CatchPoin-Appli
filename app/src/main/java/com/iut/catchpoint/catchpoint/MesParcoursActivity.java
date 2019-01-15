@@ -25,23 +25,28 @@ public class MesParcoursActivity extends AppCompatActivity {
     private List<Parcours> mesParcoursList = new ArrayList<>();
     private RecyclerView recyclerView;
     private MesparcoursAdapter mAdapter;
+    private Parcours[] tabParcours;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mes_parcours);
 
+        Intent intent = getIntent();
+        tabParcours = (Parcours[]) intent.getSerializableExtra("parcours");
+
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_parcours);
-        mAdapter = new MesparcoursAdapter(mesParcoursList);
+        mAdapter = new MesparcoursAdapter(tabParcours);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
-        prepareParcoursData();
+        //prepareParcoursData();
     }
 
     private void prepareParcoursData() {
+        //TODO a faire dans maps activity et envoyer les data ici avec des putExtra
         StringRequest request=new StringRequest(com.android.volley.Request.Method.GET, URL, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -58,12 +63,6 @@ public class MesParcoursActivity extends AppCompatActivity {
     }
         });
         ConnectionManager.getInstance(this).add(request);
-        Parcours test = new Parcours(1, "Premier parcours", 12.5, 3, 55, "Mon premier parcours trop bien");
-        mesParcoursList.add(test);
-        test = new Parcours(2, "Deuxième parcours", 5.48, 1, 20, "Mon Deuxieme parcours trop bien");
-        mesParcoursList.add(test);
-        test = new Parcours(3, "Troisième parcours", 8.9, 3, 35, "Mon Troisième parcours trop bien");
-        mesParcoursList.add(test);
     }
 
     public void goBack(View view){
