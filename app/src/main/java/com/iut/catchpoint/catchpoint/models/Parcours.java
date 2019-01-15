@@ -28,14 +28,13 @@ public class Parcours implements Serializable {
 
     public Parcours() {}
 
-    public Parcours(int id, String nom_parcours, double distance, int difficulte, int duree, String description_parcours, Point[] listPoint) {
+    public Parcours(int id, String nom_parcours, double distance, int difficulte, int duree, String description_parcours) {
         this.id_parcours = id;
         this.nom_parcours = nom_parcours;
         this.distance = distance;
         this.difficulte = difficulte;
         this.duree = duree;
         this.description_parcours = description_parcours;
-        this.listPoint = listPoint;
     }
 
     public int getId() {

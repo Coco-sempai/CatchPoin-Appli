@@ -28,7 +28,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.iut.catchpoint.catchpoint.models.Point;
 
-
 public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener,
         OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, LocationListener {
@@ -66,8 +65,8 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
                 Location pointLocation;
                 for(Point point:pointDepart) {
                     pointLocation = new Location("test");
-                    pointLocation.setLatitude(pointDepart[0].getLatitude());
-                    pointLocation.setLongitude((pointDepart[0].getLongitude()));
+                    pointLocation.setLatitude(point.getLatitude());
+                    pointLocation.setLongitude((point.getLongitude()));
                     drawMarker(pointLocation);
                 }
             }
@@ -93,6 +92,26 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        pointDepart = new Point[3];
+
+        Point test = new Point(1,"Depart 1",6.850,47.640,true,false,"Le prochain point se trouve à etc...",1);
+        pointDepart[0] = test;
+
+        test = new Point(2,"Depart 2",6.859,47.649,true,false,"Le prochain point se trouve à etc...",2);
+        pointDepart[1] = test;
+
+        test = new Point(3,"Depart 3",6.855,47.645,true,false,"Le prochain point se trouve à etc...",3);
+        pointDepart[2] = test;
+        Location pointLocation = new Location("test");
+        pointLocation.setLongitude(6.85708);
+        pointLocation.setLatitude(476439);
+        drawMarker(pointLocation);
+        for(Point point:pointDepart) {
+            pointLocation.setProvider(point.getTitrePoint());
+            pointLocation.setLatitude(point.getLatitude());
+            pointLocation.setLongitude((point.getLongitude()));
+            drawMarker(pointLocation);
+        }
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
                 explain();
@@ -160,7 +179,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
     }
 
     private void drawMarker(Location location) {
-        if (mMap != null) {
+        if(mMap!=null) {
             //mMap.clear();
             LatLng gps = new LatLng(location.getLatitude(), location.getLongitude());
             mMap.addMarker(new MarkerOptions()

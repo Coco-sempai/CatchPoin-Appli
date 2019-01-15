@@ -1,5 +1,6 @@
 package com.iut.catchpoint.catchpoint;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,14 +27,15 @@ public class MesparcoursAdapter extends RecyclerView.Adapter<MesparcoursAdapter.
         this.mesParcoursList = mesParcoursList;
     }
 
+    @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.mesparcours_list_row, parent, false);
         return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Parcours parc = mesParcoursList.get(position);
         holder.name.setText(parc.getNom_parcours());
     }

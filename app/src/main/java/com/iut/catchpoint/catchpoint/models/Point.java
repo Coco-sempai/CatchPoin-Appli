@@ -9,14 +9,11 @@ public class Point implements Serializable {
     @SerializedName("idPoint")
     private int id_point;
 
-    @SerializedName("nomParcours")
-    private String nom_parcours;
-
     @SerializedName("longitude")
     private double longitude;
 
     @SerializedName("latitude")
-    private int latitude;
+    private double latitude;
 
     @SerializedName("depart")
     private boolean depart;
@@ -36,15 +33,14 @@ public class Point implements Serializable {
     public Point() {
     }
 
-    public Point(int id_point, String nom_parcours, double longitude, int latitude, boolean depart, boolean arrive, String descriptionPoint, String titrePoint, int parcoursId) {
+    public Point(int id_point, String titrePoint, double longitude, double latitude, boolean depart, boolean arrive, String descriptionPoint, int parcoursId) {
         this.id_point = id_point;
-        this.nom_parcours = nom_parcours;
+        this.titrePoint = titrePoint;
         this.longitude = longitude;
         this.latitude = latitude;
         this.depart = depart;
         this.arrive = arrive;
         this.descriptionPoint = descriptionPoint;
-        this.titrePoint = titrePoint;
         this.parcoursId = parcoursId;
     }
 
@@ -56,14 +52,6 @@ public class Point implements Serializable {
         this.id_point = id_point;
     }
 
-    public String getNom_parcours() {
-        return nom_parcours;
-    }
-
-    public void setNom_parcours(String nom_parcours) {
-        this.nom_parcours = nom_parcours;
-    }
-
     public double getLongitude() {
         return longitude;
     }
@@ -72,11 +60,11 @@ public class Point implements Serializable {
         this.longitude = longitude;
     }
 
-    public int getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(int latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 

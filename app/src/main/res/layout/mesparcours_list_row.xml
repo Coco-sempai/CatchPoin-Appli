@@ -12,11 +12,11 @@
     <TextView
         android:id="@+id/txt_name_parcours"
         android:text="Parcours de la truite Lapine"
+        android:layout_margin="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:textSize="20sp"/>
 
     <ImageView
         android:layout_width="20dp"
