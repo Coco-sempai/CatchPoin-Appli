@@ -48,8 +48,9 @@
         <activity
             android:name=".ProfilActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MesParcoursActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".MesParcoursActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
