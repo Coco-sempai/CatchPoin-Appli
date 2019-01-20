@@ -29,7 +29,8 @@
             android:src="@drawable/chewbacca_portrait" />
 
         <TableRow
-            android:background="@color/White">
+            android:background="@color/White"
+            android:id="@+id/nomDialog">
 
             <TextView
                 android:layout_column="1"
@@ -44,7 +45,8 @@
                 android:padding="10dip"
                 android:text="Henry"
                 android:textSize="20sp"
-                android:textAlignment="textEnd"/>
+                android:textAlignment="textEnd"
+                />
 
             <Button
                 android:layout_width="20dp"
@@ -52,7 +54,6 @@
                 android:background="@drawable/pititefleche"
                 android:tint="@color/colorIcon"
                 android:layout_marginEnd="25dp"
-                android:id="@+id/buttonShowCustomDialog"
                 />
 
         </TableRow>

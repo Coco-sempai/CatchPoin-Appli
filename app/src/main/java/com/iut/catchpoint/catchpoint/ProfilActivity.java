@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 public class ProfilActivity extends AppCompatActivity implements DialogProfil.DialogProfilListener {
@@ -22,10 +23,11 @@ public class ProfilActivity extends AppCompatActivity implements DialogProfil.Di
         setContentView(R.layout.activity_profil);
 
         arrow_back = findViewById(R.id.arrow_back);
-        button = (Button) findViewById(R.id.buttonShowCustomDialog);
+        TableRow row = findViewById(R.id.nomDialog);
+
         textViewUsername = (TextView) findViewById(R.id.text_nom_alert);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openDialog();

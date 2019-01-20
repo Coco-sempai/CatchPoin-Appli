@@ -3,6 +3,11 @@ package com.iut.catchpoint.catchpoint;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -18,12 +23,14 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -35,14 +42,16 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
         GoogleMap.OnMyLocationClickListener,
         OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback, LocationListener {
 
-    public final String URL_PARCOURS = "http://localhost:8000/api/parcours";
-    public final String URL_DEPART = "http://localhost:8000/api/parcours/depart";
+    public final String URL_PARCOURS = "http://10.0.2.2:8000/api/parcours";
+    public final String URL_DEPART = "http://10.0.2.2:8000/api/parcours/depart";
+    public String URL_POINTS = "http://10.0.2.2:8000/api/parcours/points/";
 
     private GoogleMap mMap;
     private FrameLayout coordinatorLayout;
     private ImageView settings__view;
     private Point[] pointDepart;
     private Parcours[] tabParcours;
+    private Point[] pointsParcours;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,22 +66,35 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         settings__view = findViewById(R.id.settings);
 
-
-        StringRequest request=new StringRequest(com.android.volley.Request.Method.GET,
-                URL_DEPART, new com.android.volley.Response.Listener<String>() {
+        StringRequest requestParcours=new StringRequest(com.android.volley.Request.Method.GET,
+                URL_PARCOURS, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                pointDepart=new Gson().fromJson(response,Point[].class);
-                //TODO Chargement de tout les parcours en même temps ou juste quand on clic sur un point ?
-
-                //Log.d("pointDepart",pointDepart[0].getDescriptionPoint());
-                Location pointLocation;
-                for(Point point:pointDepart) {
-                    pointLocation = new Location("test");
-                    pointLocation.setLatitude(point.getLatitude());
-                    pointLocation.setLongitude((point.getLongitude()));
-                    //drawMarker(pointLocation,point.getParcoursId());
-                }
+                tabParcours=new Gson().fromJson(response,Parcours[].class);
+                StringRequest requestPoint=new StringRequest(com.android.volley.Request.Method.GET,
+                        URL_DEPART, new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        pointDepart=new Gson().fromJson(response,Point[].class);
+                        Location pointLocation;
+                        for(Point point:pointDepart) {
+                            pointLocation = new Location("test");
+                            pointLocation.setLatitude(point.getLatitude());
+                            pointLocation.setLongitude((point.getLongitude()));
+                            drawMarker(pointLocation,point.getParcoursId().getId());
+                        }
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("VolleyError", String.valueOf(error));
+                    }
+                });
+                requestPoint.setRetryPolicy(new DefaultRetryPolicy(
+                        5000,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                ConnectionManager.getInstance(getBaseContext()).add(requestPoint);
             }
         }, new com.android.volley.Response.ErrorListener() {
             @Override
@@ -80,7 +102,11 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
                 Log.d("VolleyError", String.valueOf(error));
             }
         });
-        ConnectionManager.getInstance(this).add(request);
+        requestParcours.setRetryPolicy(new DefaultRetryPolicy(
+                5000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        ConnectionManager.getInstance(this).add(requestParcours);
     }
 
 
@@ -96,51 +122,64 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        ////////// PARCOURS DE TEST //////////
-        tabParcours = new Parcours[3];
-        Parcours parcours = new Parcours(1, "Premier parcours", 12.5, 3, 55, "Mon premier parcours trop bien");
-        tabParcours[0] = parcours;
-        parcours = new Parcours(2, "Deuxième parcours", 5.48, 1, 20, "Mon Deuxieme parcours trop bien");
-        tabParcours[1] = parcours;
-        parcours = new Parcours(3, "Troisième parcours", 8.9, 3, 35, "Mon Troisième parcours trop bien");
-        tabParcours[2] = parcours;
-        ///////////////////////////////////////////////////////////////
-
-        ////////// POINT DU PARCOURS TEST //////////
-        Point[] tabPoint = new Point[5];
-        for(int i=1;i<=tabPoint.length;i++){
-            tabPoint[i-1] = new Point(i,"Point "+i,6.855+i*0.01,47.640+i*0.01,false,false,"Le prochain point se trouve à etc...",1);
-        }
-        tabParcours[0].setListPoint(tabPoint);
-
-        for(int i=1;i<=tabPoint.length;i++){
-            tabPoint[i-1] = new Point(i,"Point "+i,6.859+i*0.01,47.649+i*0.01,false,false,"Le prochain point se trouve à etc...",2);
-
-        }
-        tabParcours[1].setListPoint(tabPoint);
-
-        for(int i=1;i<=tabPoint.length;i++){
-            tabPoint[i-1] = new Point(i,"Point "+i,6.855+i*0.01,47.645+i*0.01,false,false,"Le prochain point se trouve à etc...",3);
-        }
-        tabParcours[2].setListPoint(tabPoint);
-        ///////////////////////////////////////////////////////////////
-
-        ////////// POINT DE DEPART TEST //////////
-        pointDepart = new Point[3];
-        Point test = new Point(1,"Depart 1",6.850,47.640,true,false,"Le prochain point se trouve à etc...",1);
-        pointDepart[0] = test;
-        test = new Point(2,"Depart 2",6.859,47.649,true,false,"Le prochain point se trouve à etc...",2);
-        pointDepart[1] = test;
-        test = new Point(3,"Depart 3",6.855,47.645,true,false,"Le prochain point se trouve à etc...",3);
-        pointDepart[2] = test;
-        Location pointLocation = new Location("test");
-        for(Point point:pointDepart) {
-            pointLocation.setProvider(point.getTitrePoint());
-            pointLocation.setLatitude(point.getLatitude());
-            pointLocation.setLongitude((point.getLongitude()));
-            drawMarker(pointLocation,point.getParcoursId());
-        }
+//
+//        ////////// PARCOURS DE TEST //////////
+//        tabParcours = new Parcours[3];
+//        Parcours parcours = new Parcours(1, "Premier parcours", 12.5, 3, 55, "Mon premier parcours trop bien");
+//        tabParcours[0] = parcours;
+//        parcours = new Parcours(2, "Deuxième parcours", 5.48, 1, 20, "Mon Deuxieme parcours trop bien");
+//        tabParcours[1] = parcours;
+//        parcours = new Parcours(3, "Troisième parcours", 8.9, 3, 35, "Mon Troisième parcours trop bien");
+//        tabParcours[2] = parcours;
+//        ///////////////////////////////////////////////////////////////
+//
+//        ////////// POINT DE DEPART TEST //////////
+//        pointDepart = new Point[3];
+//        Point test = new Point(1,"Depart 1",6.850,47.640,true,false,"Le prochain point se trouve à etc...",tabParcours[0]);
+//        pointDepart[0] = test;
+//        test = new Point(2,"Depart 2",6.859,47.649,true,false,"Le prochain point se trouve à etc...",tabParcours[1]);
+//        pointDepart[1] = test;
+//        test = new Point(3,"Depart 3",6.855,47.645,true,false,"Le prochain point se trouve à etc...",tabParcours[2]);
+//        pointDepart[2] = test;
+//        Location pointLocation = new Location("test");
+//        for(Point point:pointDepart) {
+//            pointLocation.setProvider(point.getTitrePoint());
+//            pointLocation.setLatitude(point.getLatitude());
+//            pointLocation.setLongitude((point.getLongitude()));
+//            drawMarker(pointLocation,point.getParcoursId().getId());
+//        }
+//        ///////////////////////////////////////////////////////////////
+//
+//        ////////// POINT DU PARCOURS TEST //////////
+//        Point[] tabPoint0 = new Point[5];
+//        for(int i=1;i<=tabPoint0.length;i++){
+//            if(i==1){
+//                tabPoint0[0]=pointDepart[0];
+//            } else {
+//                tabPoint0[i - 1] = new Point(i, "Point toto" + i, 6.855 + i * 0.01, 47.640 + i * 0.01, false, false, "Le prochain point se trouve à etc...", tabParcours[0]);
+//            }
+//        }
+//        tabParcours[0].setListPoint(tabPoint0);
+//
+//        Point[] tabPoint1 = new Point[5];
+//        for(int i=1;i<=tabPoint1.length;i++){
+//            if(i==1){
+//                tabPoint1[0]=pointDepart[1];
+//            } else {
+//                tabPoint1[i - 1] = new Point(i, "Point " + i, 6.859 + i * 0.01, 47.649 + i * 0.01, false, false, "Le prochain point se trouve à etc...", tabParcours[1]);
+//            }
+//        }
+//        tabParcours[1].setListPoint(tabPoint1);
+//
+//        Point[] tabPoint2 = new Point[5];
+//        for(int i=1;i<=tabPoint2.length;i++){
+//            if(i==1){
+//                tabPoint2[0]=pointDepart[2];
+//            } else {
+//                tabPoint2[i - 1] = new Point(i, "Point " + i, 6.855 + i * 0.01, 47.645 + i * 0.01, false, false, "Le prochain point se trouve à etc...", tabParcours[2]);
+//            }
+//        }
+//        tabParcours[2].setListPoint(tabPoint2);
         ///////////////////////////////////////////////////////////////
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -209,24 +248,48 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    private void drawMarker(final Location location, int id) {
+    private void drawMarker(Location location, int id) {
         if(mMap!=null) {
             //mMap.clear();
+            Bitmap bitmapIcon = drawableToBitmap(getResources().getDrawable( R.drawable.ic_compass ));
+
             LatLng gps = new LatLng(location.getLatitude(), location.getLongitude());
             mMap.addMarker(new MarkerOptions()
                     .position(gps)
+                    .icon(BitmapDescriptorFactory.fromBitmap(bitmapIcon))
                     .snippet(String.valueOf(id))
                     .title(location.getProvider()));
             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
                     mMap.clear();
-                    for(Point point:tabParcours[Integer.parseInt(marker.getSnippet())-1].getListPoint()) {
-                        LatLng gps = new LatLng(point.getLatitude(), point.getLongitude());
-                        mMap.addMarker(new MarkerOptions()
-                                .position(gps)
-                                .title(point.getTitrePoint()));
-                    }
+                    // TODO Afficher les détails du parcours via un fragment supperposé ou un dialog
+                    // Affichage des points du parcours (juste pour le test)
+                    StringRequest requestPoint=new StringRequest(com.android.volley.Request.Method.GET,
+                            URL_POINTS+String.valueOf(marker.getSnippet()), new com.android.volley.Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            pointsParcours=new Gson().fromJson(response,Point[].class);
+                            Location pointLocation;
+                            for(Point point:pointsParcours) {
+                                Log.d("pointsParcours","oui2"+point.getTitrePoint());
+                                pointLocation = new Location("test");
+                                pointLocation.setLatitude(point.getLatitude());
+                                pointLocation.setLongitude((point.getLongitude()));
+                                drawMarker(pointLocation,point.getParcoursId().getId());
+                            }
+                        }
+                    }, new com.android.volley.Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("VolleyError", String.valueOf(error));
+                        }
+                    });
+                    requestPoint.setRetryPolicy(new DefaultRetryPolicy(
+                            5000,
+                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                    ConnectionManager.getInstance(getBaseContext()).add(requestPoint);
                     return true;
                 }
             });
@@ -283,4 +346,26 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
             return false;
         }
     };
+
+    public static Bitmap drawableToBitmap (Drawable drawable) {
+        Bitmap bitmap = null;
+
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if (bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
+        }
+
+        if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
 }

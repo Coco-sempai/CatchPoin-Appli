@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public class Parcours implements Serializable {
 
-    @SerializedName("iParcours")
+    @SerializedName("idParcours")
     private int id_parcours;
 
     @SerializedName("nomParcours")
@@ -83,14 +83,6 @@ public class Parcours implements Serializable {
 
     public void setDescription_parcours(String description_parcours) {
         this.description_parcours = description_parcours;
-    }
-
-    public int getId_parcours() {
-        return id_parcours;
-    }
-
-    public void setId_parcours(int id_parcours) {
-        this.id_parcours = id_parcours;
     }
 
     public Point[] getListPoint() {
