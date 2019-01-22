@@ -12,10 +12,12 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,6 +54,8 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
     private Point[] pointDepart;
     private Parcours[] tabParcours;
     private Point[] pointsParcours;
+    private int screenHeight;
+    private int screenWidth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,11 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         settings__view = findViewById(R.id.settings);
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        screenHeight = metrics.heightPixels;
+        screenWidth = metrics.widthPixels;
 
         StringRequest requestParcours=new StringRequest(com.android.volley.Request.Method.GET,
                 URL_PARCOURS, new com.android.volley.Response.Listener<String>() {
@@ -122,7 +131,6 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-//
 //        ////////// PARCOURS DE TEST //////////
 //        tabParcours = new Parcours[3];
 //        Parcours parcours = new Parcours(1, "Premier parcours", 12.5, 3, 55, "Mon premier parcours trop bien");
@@ -262,9 +270,17 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
-                    mMap.clear();
-                    // TODO Afficher les détails du parcours via un fragment supperposé ou un dialog
+                    Parcours parcoursInfo =  new Parcours();
+                    for(Parcours p:tabParcours){
+                        if(p.getId()== Integer.parseInt(marker.getSnippet())){
+                            parcoursInfo = p;
+                        }
+                    }
+                    DialogParcours test = new DialogParcours(MapsActivity.this,parcoursInfo,screenHeight,screenWidth);
+                    test.show();
+                    // TODO Afficher les détails du parcours via un fragment superposé ou un dialog
                     // Affichage des points du parcours (juste pour le test)
+                    /*
                     StringRequest requestPoint=new StringRequest(com.android.volley.Request.Method.GET,
                             URL_POINTS+String.valueOf(marker.getSnippet()), new com.android.volley.Response.Listener<String>() {
                         @Override
@@ -289,7 +305,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
                             5000,
                             DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-                    ConnectionManager.getInstance(getBaseContext()).add(requestPoint);
+                    ConnectionManager.getInstance(getBaseContext()).add(requestPoint);*/
                     return true;
                 }
             });

@@ -27,7 +27,4 @@
             android:background="#E8E8E8"
             app:menu="@menu/navigation" />
     </fragment>
-
-
-
 </LinearLayout>

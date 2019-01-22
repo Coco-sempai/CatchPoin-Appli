@@ -31,5 +31,8 @@
     <string name="pseudo_profil_bar">Pseudo</string>
     <string name="email_profil_bar">E-mail</string>
     <string name="mdp_profil_bar">Mot de passe</string>
+    <string name="annuler">Annuler</string>
+    <string name="catch_it">Catch it!</string>
+    <string name="difficult">Difficulté :</string>
 
 </resources>
