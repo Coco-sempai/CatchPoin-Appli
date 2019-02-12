@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_duree"
+        android:title="duree"/>
+
+    <item
+        android:id="@+id/menu_indice"
+        android:icon="@drawable/ic_indice"
+        android:title="Indice"/>
+
+    <item
+        android:id="@+id/menu_catch"
+        android:icon="@drawable/ic_catch_it"
+        android:title="@string/catch_it"/>
+
+    <item
+        android:id="@+id/menu_abandon"
+        android:icon="@drawable/ic_abandon"
+        android:title="@string/abandonner"/>
+
+</menu>

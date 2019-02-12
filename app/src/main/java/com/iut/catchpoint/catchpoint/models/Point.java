@@ -21,7 +21,7 @@ public class Point implements Serializable {
     @SerializedName("arrive")
     private boolean arrive;
 
-    @SerializedName("descriptionPoint")
+    @SerializedName("decriptionPoint")
     private String descriptionPoint;
 
     @SerializedName("titrePoint")

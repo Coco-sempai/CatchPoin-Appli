@@ -5,7 +5,8 @@
     android:layout_height="85dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="@layout/activity_maps"
-    android:background="@drawable/main_header_selector">
+    android:background="@drawable/main_header_selector"
+    app:layout_constraintTop_toTopOf="parent">
 
     <ImageView
         android:id="@+id/logo"

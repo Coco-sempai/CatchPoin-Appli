@@ -34,5 +34,7 @@
     <string name="annuler">Annuler</string>
     <string name="catch_it">Catch it!</string>
     <string name="difficult">Difficulté :</string>
+    <string name="abandonner">Abandonner</string>
+    <string name="indice">Indice</string>
 
 </resources>

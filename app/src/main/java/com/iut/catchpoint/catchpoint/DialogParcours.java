@@ -9,10 +9,13 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.iut.catchpoint.catchpoint.models.Parcours;
+
+import org.w3c.dom.Text;
 
 import java.util.Objects;
 
@@ -21,6 +24,8 @@ public class DialogParcours extends Dialog  {
     private Parcours parcours;
     private int height;
     private int width;
+    OnMyDialogResult mDialogResult; // the callback
+
 
     public DialogParcours(Context context, Parcours parcours,int height, int width) {
         super(context);
@@ -39,6 +44,8 @@ public class DialogParcours extends Dialog  {
         TextView difficulty = (TextView) findViewById(R.id.parcours_difficulty);
         TextView duree = (TextView) findViewById(R.id.parcours_duree);
         TextView distance = (TextView) findViewById(R.id.parcours_distance);
+        TextView idParcours = (TextView) findViewById(R.id.idParcours);
+        Button catchit = (Button) findViewById(R.id.catchItButton);
 
         title.setText(parcours.getNom_parcours());
         description.setText(parcours.getDescription_parcours());
@@ -47,6 +54,26 @@ public class DialogParcours extends Dialog  {
         difficulty.setText("Difficulté : "+parcours.getDifficulte());
         duree.setText(String.valueOf(parcours.getDuree()));
 
+        catchit.setOnClickListener(new catchItListener());
+
         getWindow().setLayout(width,height);
+    }
+
+    private class catchItListener implements android.view.View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            if( mDialogResult != null ){
+                mDialogResult.finish(String.valueOf(parcours.getId()));
+            }
+            DialogParcours.this.dismiss();
+        }
+    }
+
+    public void setDialogResult(OnMyDialogResult dialogResult){
+        mDialogResult = dialogResult;
+    }
+
+    public interface OnMyDialogResult{
+        void finish(String result);
     }
 }
