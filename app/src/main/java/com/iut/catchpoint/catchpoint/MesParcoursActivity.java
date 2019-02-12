@@ -46,7 +46,6 @@ public class MesParcoursActivity extends AppCompatActivity {
     }
 
     private void prepareParcoursData() {
-        //TODO a faire dans maps activity et envoyer les data ici avec des putExtra
         StringRequest request=new StringRequest(com.android.volley.Request.Method.GET, URL, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

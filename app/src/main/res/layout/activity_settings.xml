@@ -20,9 +20,6 @@
         android:layout_marginEnd="10dp"
         android:stretchColumns="1">
 
-        <View
-            android:layout_height="1dip"
-            android:background="#D8D8D8" />
     <TableRow>
         <TextView
             android:layout_column="1"

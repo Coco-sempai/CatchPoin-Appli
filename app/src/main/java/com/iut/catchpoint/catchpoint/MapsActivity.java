@@ -103,41 +103,8 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
         indice_icon.setOnClickListener(showIndice);
         catchIt.setOnClickListener(checkPosition);
 
-        StringRequest requestParcours = new StringRequest(com.android.volley.Request.Method.GET,
-                URL_PARCOURS, new com.android.volley.Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                tabParcours = new Gson().fromJson(response, Parcours[].class);
-                StringRequest requestPoint = new StringRequest(com.android.volley.Request.Method.GET,
-                        URL_DEPART, new com.android.volley.Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        pointDepart = new Gson().fromJson(response, Point[].class);
-                        drawAllDepart();
-                    }
-                }, new com.android.volley.Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("VolleyError", String.valueOf(error));
-                    }
-                });
-                requestPoint.setRetryPolicy(new DefaultRetryPolicy(
-                        5000,
-                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-                ConnectionManager.getInstance(getBaseContext()).add(requestPoint);
-            }
-        }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("VolleyError", String.valueOf(error));
-            }
-        });
-        requestParcours.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        ConnectionManager.getInstance(this).add(requestParcours);
+        initAll();
+
     }
 
     /**
@@ -302,32 +269,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
                     dialogParcours.setDialogResult(new DialogParcours.OnMyDialogResult() {
                         public void finish(String result) {
                             mMap.clear();
-                            StringRequest requestPoint = new StringRequest(com.android.volley.Request.Method.GET,
-                                    URL_POINTS + result, new com.android.volley.Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    pointsParcours = new Gson().fromJson(response, Point[].class);
-                                    Location pointDepart;
-                                    pointDepart = new Location(pointsParcours[0].getTitrePoint());
-                                    pointDepart.setLatitude(pointsParcours[0].getLatitude());
-                                    pointDepart.setLongitude((pointsParcours[0].getLongitude()));
-                                    drawDepart(pointDepart, pointsParcours[0].getDescriptionPoint());
-                                    currentPointIndex = 0;
-                                    currentPoint = pointsParcours[currentPointIndex];
-                                    navigation.setVisibility(View.GONE);
-                                    bar_parcours.setVisibility(View.VISIBLE);
-                                }
-                            }, new com.android.volley.Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Log.d("VolleyError", String.valueOf(error));
-                                }
-                            });
-                            requestPoint.setRetryPolicy(new DefaultRetryPolicy(
-                                    10000,
-                                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-                            ConnectionManager.getInstance(getBaseContext()).add(requestPoint);
+                            joueParcours(result);
                         }
                     });
                     return true;
@@ -436,6 +378,80 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+    }
+
+    private void joueParcours(String result){
+        StringRequest requestPoint = new StringRequest(com.android.volley.Request.Method.GET,
+                URL_POINTS + result, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                pointsParcours = new Gson().fromJson(response, Point[].class);
+                Location pointDepart;
+                pointDepart = new Location(pointsParcours[0].getTitrePoint());
+                pointDepart.setLatitude(pointsParcours[0].getLatitude());
+                pointDepart.setLongitude((pointsParcours[0].getLongitude()));
+                drawDepart(pointDepart, pointsParcours[0].getDescriptionPoint());
+                currentPointIndex = 0;
+                currentPoint = pointsParcours[currentPointIndex];
+                navigation.setVisibility(View.GONE);
+                bar_parcours.setVisibility(View.VISIBLE);
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("VolleyError", String.valueOf(error));
+            }
+        });
+        requestPoint.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        ConnectionManager.getInstance(getBaseContext()).add(requestPoint);
+    }
+
+    public void initAll(){
+        StringRequest requestParcours = new StringRequest(com.android.volley.Request.Method.GET,
+                URL_PARCOURS, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                tabParcours = new Gson().fromJson(response, Parcours[].class);
+                StringRequest requestPoint = new StringRequest(com.android.volley.Request.Method.GET,
+                        URL_DEPART, new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        pointDepart = new Gson().fromJson(response, Point[].class);
+                        Intent intent = getIntent();
+                        Parcours parcours = (Parcours) intent.getSerializableExtra("parcours");
+                        if(parcours!=null){ // Si un parcours à été lancé depuis la liste des parcours
+                            mMap.clear();
+                            joueParcours(String.valueOf(parcours.getId()));
+                        } else {
+                            drawAllDepart();
+                        }
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("VolleyError", String.valueOf(error));
+                    }
+                });
+                requestPoint.setRetryPolicy(new DefaultRetryPolicy(
+                        5000,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                ConnectionManager.getInstance(getBaseContext()).add(requestPoint);
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("VolleyError", String.valueOf(error));
+            }
+        });
+        requestParcours.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        ConnectionManager.getInstance(this).add(requestParcours);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener

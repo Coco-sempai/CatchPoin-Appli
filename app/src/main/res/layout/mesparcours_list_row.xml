@@ -1,30 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginTop="5dp">
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="10dp">
 
     <TextView
         android:id="@+id/txt_name_parcours"
         android:text="Parcours de la truite Lapine"
         android:layout_margin="20dp"
         android:layout_width="wrap_content"
+        android:fontFamily="@font/trebuc"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:textSize="20sp"/>
+        android:textSize="24sp"/>
 
     <ImageView
         android:layout_width="20dp"
         android:layout_height="30dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="20dp"
         android:src="@drawable/pititefleche"
         android:tint="@color/colorIcon"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/fleche"
+        />
+    <ImageView
+        android:layout_width="45dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_arrow_down"
+        android:tint="@color/colorIcon"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/arrow_down"
+        android:visibility="gone"
+        />
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:id="@+id/distance_mes_parcours"
+        app:layout_constraintTop_toBottomOf="@id/txt_name_parcours"
+        android:text="5km"
+        android:fontFamily="@font/trebuc"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/duree_mes_parcours"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/duree_mes_parcours"
+        android:fontFamily="@font/trebuc"
+        android:textSize="20dp"
+        app:layout_constraintTop_toBottomOf="@id/txt_name_parcours"
+        android:text="30min"
+        app:layout_constraintLeft_toRightOf="@id/distance_mes_parcours"
+        app:layout_constraintRight_toLeftOf="@id/catchIt_mes_parcours"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/difficulte_mes_parcours"
+        android:fontFamily="@font/trebuc"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/distance_mes_parcours"
+        android:text="Difficulté : 5"
+        app:layout_constraintLeft_toLeftOf="@id/distance_mes_parcours"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/delete_parcours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_abandon"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/txt_name_parcours"
+        app:layout_constraintLeft_toRightOf="@id/catchIt_mes_parcours"
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="gone"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/trebuc"
+        android:text="@string/catch_it"
+        android:textAllCaps="false"
+        android:id="@+id/catchIt_mes_parcours"
+        android:textSize="18sp"
+        android:background="@drawable/button_theme_catchit"
+        app:layout_constraintHorizontal_bias="0.65"
+        android:minHeight="35dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/txt_name_parcours"
+        app:layout_constraintLeft_toRightOf="@id/duree_mes_parcours"
+        app:layout_constraintRight_toLeftOf="@id/delete_parcours"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/desc_mes_parcours"
+        android:textSize="18sp"
+        android:fontFamily="@font/trebuc"
+        android:text="Description test"
+        app:layout_constraintTop_toBottomOf="@id/difficulte_mes_parcours"
+        app:layout_constraintLeft_toLeftOf="@id/difficulte_mes_parcours"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"/>
 
 </android.support.constraint.ConstraintLayout>
