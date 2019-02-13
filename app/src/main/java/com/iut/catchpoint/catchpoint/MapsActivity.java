@@ -72,6 +72,8 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
     private ImageView indice_icon; // item de bar_parcours
     private TextView distanceNavigationBar; // item de bar_parcours
 
+    private Location loc_user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -362,6 +364,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
                 Log.v("newLocation", "IN ON LOCATION CHANGE, lat=" + location.getLatitude() + ", lon=" + location.getLongitude());
+                loc_user = location;
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -507,37 +510,45 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
 
     View.OnClickListener checkPosition = new View.OnClickListener() {
         public void onClick(View v) {
-            //if(currentPointIndex == 0) mMap.clear();
-            // TODO Si currentLocation = currentPoint Location alors on passe on point suivant, sinon toast avec message
+            Location currentPointLocation = new Location("Point location");
+            currentPointLocation.setLongitude(currentPoint.getLongitude());
+            currentPointLocation.setLatitude(currentPoint.getLatitude());
+            Log.d("Distance_user_point",String.valueOf(currentPointLocation.distanceTo(loc_user)));
+            if(currentPointLocation.distanceTo(loc_user)<=10){
+                //if(currentPointIndex == 0) mMap.clear();
+                Toast.makeText(MapsActivity.this,"Vous avez trouvé le point ! L'indice du point suivant est disponible",Toast.LENGTH_LONG).show();
 
-            // Affichage du point validé
-            Location pointValide;
-            pointValide = new Location(pointsParcours[currentPointIndex].getTitrePoint());
-            pointValide.setLatitude(pointsParcours[currentPointIndex].getLatitude());
-            pointValide.setLongitude((pointsParcours[currentPointIndex].getLongitude()));
-            drawDepart(pointValide, pointsParcours[currentPointIndex].getDescriptionPoint());
+                // Affichage du point validé
+                Location pointValide;
+                pointValide = new Location(pointsParcours[currentPointIndex].getTitrePoint());
+                pointValide.setLatitude(pointsParcours[currentPointIndex].getLatitude());
+                pointValide.setLongitude((pointsParcours[currentPointIndex].getLongitude()));
+                drawDepart(pointValide, pointsParcours[currentPointIndex].getDescriptionPoint());
 
-            currentPointIndex++;
+                currentPointIndex++;
 
-            if(currentPointIndex >= pointsParcours.length){
-                // Fin du parcours, affichage du temps écoulé ?
-                AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
-                builder.setTitle("Parcours terminé")
-                        .setMessage("Bravo vous avez terminé le parcours : "+currentPoint.getParcoursId().getNom_parcours())
-                        .show();
-                mMap.clear();
-                drawAllDepart();
-                navigation.setVisibility(View.VISIBLE);
-                bar_parcours.setVisibility(View.GONE);
+                if(currentPointIndex >= pointsParcours.length){
+                    // Fin du parcours, affichage du temps écoulé ?
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
+                    builder.setTitle("Parcours terminé")
+                            .setMessage("Bravo vous avez terminé le parcours : "+currentPoint.getParcoursId().getNom_parcours())
+                            .show();
+                    mMap.clear();
+                    drawAllDepart();
+                    navigation.setVisibility(View.VISIBLE);
+                    bar_parcours.setVisibility(View.GONE);
+                } else {
+    //                // Affichage du point suivant (pour le test)
+    //                Location pointSuivant;
+    //                pointSuivant = new Location(pointsParcours[currentPointIndex].getTitrePoint());
+    //                pointSuivant.setLatitude(pointsParcours[currentPointIndex].getLatitude());
+    //                pointSuivant.setLongitude((pointsParcours[currentPointIndex].getLongitude()));
+    //                drawDepart(pointSuivant, pointsParcours[currentPointIndex].getDescriptionPoint());
+
+                    currentPoint = pointsParcours[currentPointIndex];
+                }
             } else {
-                // Affichage du point suivant (pour le test)
-                Location pointSuivant;
-                pointSuivant = new Location(pointsParcours[currentPointIndex].getTitrePoint());
-                pointSuivant.setLatitude(pointsParcours[currentPointIndex].getLatitude());
-                pointSuivant.setLongitude((pointsParcours[currentPointIndex].getLongitude()));
-                drawDepart(pointSuivant, pointsParcours[currentPointIndex].getDescriptionPoint());
-
-                currentPoint = pointsParcours[currentPointIndex];
+                Toast.makeText(MapsActivity.this,"Ce n'est pas la bonne position !",Toast.LENGTH_LONG).show();
             }
         }
     };
