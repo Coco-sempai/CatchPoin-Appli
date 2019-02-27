@@ -1,6 +1,7 @@
 package com.iut.catchpoint.catchpoint;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -509,6 +510,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
     };
 
     View.OnClickListener checkPosition = new View.OnClickListener() {
+        @SuppressLint("SetTextI18n")
         public void onClick(View v) {
             Location currentPointLocation = new Location("Point location");
             currentPointLocation.setLongitude(currentPoint.getLongitude());
@@ -546,10 +548,19 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
     //                drawDepart(pointSuivant, pointsParcours[currentPointIndex].getDescriptionPoint());
 
                     currentPoint = pointsParcours[currentPointIndex];
+                    currentPointLocation.setLongitude(currentPoint.getLongitude());
+                    currentPointLocation.setLatitude(currentPoint.getLatitude());
+                    distanceNavigationBar.setText(String.valueOf(arrondir(currentPointLocation.distanceTo(loc_user)/1000,2))+"km");
                 }
             } else {
+                distanceNavigationBar.setText(String.valueOf(arrondir(currentPointLocation.distanceTo(loc_user)/1000,2))+"km");
                 Toast.makeText(MapsActivity.this,"Ce n'est pas la bonne position !",Toast.LENGTH_LONG).show();
             }
         }
     };
+
+    public double arrondir(double nombre,double nbApVirg)
+    {
+        return(double)((int)(nombre * Math.pow(10,nbApVirg) + .5)) / Math.pow(10,nbApVirg);
+    }
 }
